@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Tea.Client.Extensions.DependencyInjection/Tea.Client.Extensions.DependencyInjection.csproj" />
+    <Project Path="src/Tea.Client/Tea.Client.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Tea.Client.Tests/Tea.Client.Tests.csproj" />
+  </Folder>
+</Solution>
