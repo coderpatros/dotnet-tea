@@ -6,4 +6,4 @@ RUN dotnet publish src/CoderPatros.Tea.Web/CoderPatros.Tea.Web.csproj -c Release
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "CoderPatros.Tea.Web.dll"]
+ENTRYPOINT ["dotnet", "tea-web.dll"]

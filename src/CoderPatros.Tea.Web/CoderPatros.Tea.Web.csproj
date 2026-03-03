@@ -1,5 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <PropertyGroup>
+    <AssemblyName>tea-web</AssemblyName>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\CoderPatros.Tea.Client\CoderPatros.Tea.Client.csproj" />
     <ProjectReference Include="..\CoderPatros.Tea.Client.Extensions.DependencyInjection\CoderPatros.Tea.Client.Extensions.DependencyInjection.csproj" />

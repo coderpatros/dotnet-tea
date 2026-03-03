@@ -38,14 +38,31 @@ TEA Explorer is a web-based interface for browsing and exploring TEA servers. Bu
 
 ![TEA Explorer screenshot](tea-explorer.png)
 
+### Installation
+
+[Download a standalone binary from GitHub releases](https://github.com/coderpatros/dotnet-tea/releases)
+Available for linux-x64, linux-arm64, osx-x64, osx-arm64, win-x64, win-arm64
+
+```bash
+# Example: download and extract on Linux
+tar -xzf tea-web-v0.0.1-linux-x64.tar.gz
+./tea-web
+```
+
 ### Running
 
 ```bash
+# Run the standalone binary
+./tea-web
+# Visit http://localhost:5000 in your browser
+
 # Run with Docker
 docker run -p 8080:8080 coderpatros/tea-web
+# Visit http://localhost:8080 in your browser
 
 # Or run from source
 dotnet run --project src/CoderPatros.Tea.Web
+# Visit http://localhost:5000 in your browser
 ```
 
 Configure a TEA server base URL and optional bearer token from the home page. Settings are stored in your browser session.
