@@ -11,6 +11,79 @@ Targets the TEA specification **v0.3.0-beta.2**.
 | `CoderPatros.Tea.Client` | Core client library |
 | `CoderPatros.Tea.Client.Extensions.DependencyInjection` | DI integration with `IHttpClientFactory` |
 
+## CLI Tool
+
+The `tea` CLI is a command-line interface for interacting with TEA servers. It is available as a .NET global tool or can be run directly from source.
+
+### Installation
+
+```bash
+# Install as a .NET global tool
+dotnet tool install --global CoderPatros.Tea.Cli
+
+# Or run from source
+dotnet run --project src/CoderPatros.Tea.Cli -- --help
+```
+
+### Global Options
+
+| Option | Description |
+| --- | --- |
+| `--base-url` | TEA server base URL (or set `TEA_BASE_URL` env var) |
+| `--domain` | Discover TEA server via `.well-known/tea` for this domain |
+| `--token` | Bearer token for authentication (or set `TEA_TOKEN` env var) |
+| `--json` | Output raw JSON instead of formatted tables |
+| `--timeout` | Request timeout in seconds (default: 30) |
+
+### Commands
+
+| Command | Description |
+| --- | --- |
+| `discover` | Discover TEA servers for a TEI |
+| `search-products` | Search for products |
+| `search-releases` | Search for product releases |
+| `get-product` | Get a product by UUID |
+| `get-release` | Get a product or component release by UUID |
+| `get-collection` | Get the collection for a product or component release |
+| `get-product-releases` | Get releases for a product |
+| `get-component` | Get a component by UUID |
+| `get-component-releases` | Get releases for a component |
+| `list-collections` | List collections for a product or component release |
+| `get-artifact` | Get an artifact by UUID |
+| `get-cle` | Get Component Lifecycle Events (CLE) for an entity |
+| `download` | Download an artifact and optionally verify checksums |
+| `inspect` | Full inspection: discover TEI, list releases, collections, and artifacts |
+
+### Examples
+
+```bash
+# Discover TEA servers for a TEI
+tea discover urn:tei:purl:example.com:pkg:npm/express --base-url https://tea.example.com/tea/v1/
+
+# Get a product by UUID
+tea get-product 09e8c73b-ac45-4475-acac-33e6a7314e6d --base-url https://tea.example.com/tea/v1/
+
+# Full inspection of a TEI (discover, releases, collections, artifacts)
+tea inspect urn:tei:purl:example.com:pkg:npm/express
+
+# Output as JSON
+tea get-product 09e8c73b-ac45-4475-acac-33e6a7314e6d --json --base-url https://tea.example.com/tea/v1/
+
+# Use environment variables instead of flags
+export TEA_BASE_URL=https://tea.example.com/tea/v1/
+export TEA_TOKEN=my-api-token
+tea search-products --id-type PURL --id-value pkg:npm/express
+```
+
+### Local Development
+
+Use the `run-cli.sh` script at the repository root to run the CLI without remembering the project path:
+
+```bash
+./run-cli.sh --help
+./run-cli.sh get-product --base-url https://example.com/tea/v1/ <uuid>
+```
+
 ## Requirements
 
 - .NET 8.0 or later

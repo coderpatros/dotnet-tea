@@ -1,9 +1,11 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/CoderPatros.Tea.Client.Extensions.DependencyInjection/CoderPatros.Tea.Client.Extensions.DependencyInjection.csproj" />
     <Project Path="src/CoderPatros.Tea.Client/CoderPatros.Tea.Client.csproj" />
+    <Project Path="src/CoderPatros.Tea.Client.Extensions.DependencyInjection/CoderPatros.Tea.Client.Extensions.DependencyInjection.csproj" />
+    <Project Path="src/CoderPatros.Tea.Cli/CoderPatros.Tea.Cli.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/CoderPatros.Tea.Client.Tests/CoderPatros.Tea.Client.Tests.csproj" />
+    <Project Path="tests/CoderPatros.Tea.Cli.Tests/CoderPatros.Tea.Cli.Tests.csproj" />
   </Folder>
 </Solution>

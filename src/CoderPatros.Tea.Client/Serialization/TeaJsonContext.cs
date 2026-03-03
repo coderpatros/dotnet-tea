@@ -37,6 +37,7 @@ namespace CoderPatros.Tea.Client.Serialization;
 [JsonSerializable(typeof(WellKnownEndpoint))]
 [JsonSerializable(typeof(DiscoveryInfo))]
 [JsonSerializable(typeof(DiscoveryInfo[]))]
+[JsonSerializable(typeof(IReadOnlyList<DiscoveryInfo>))]
 [JsonSerializable(typeof(TeaServerInfo))]
 [JsonSerializable(typeof(IReadOnlyList<TeaComponentRelease>))]
 [JsonSerializable(typeof(IReadOnlyList<TeaCollection>))]

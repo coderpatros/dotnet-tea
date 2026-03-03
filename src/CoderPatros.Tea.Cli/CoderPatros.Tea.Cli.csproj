@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <PackageId>CoderPatros.Tea.Cli</PackageId>
+    <Description>CLI tool for the Transparency Exchange API (TEA)</Description>
+    <Authors>TEA Contributors</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/CycloneDX/transparency-exchange-api</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/CycloneDX/transparency-exchange-api</RepositoryUrl>
+    <PackageTags>tea;transparency;sbom;vex;supply-chain;cyclonedx;cli</PackageTags>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>tea</ToolCommandName>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="CoderPatros.Tea.Cli.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CoderPatros.Tea.Client\CoderPatros.Tea.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta5.25306.1" />
+    <PackageReference Include="Spectre.Console" Version="0.49.1" />
+  </ItemGroup>
+
+</Project>
