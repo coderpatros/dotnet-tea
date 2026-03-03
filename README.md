@@ -52,19 +52,15 @@ Configure a TEA server base URL and optional bearer token from the home page. Se
 
 ## CLI Tool
 
-The `tea` CLI is a command-line interface for interacting with TEA servers. It is available as a .NET global tool or can be run directly from source.
+The `tea` CLI is a command-line interface for interacting with TEA servers. It is available as a standalone binary or can be run directly from source.
 
 ### Installation
 
+[Download a standalone binary from GitHub releases](https://github.com/coderpatros/dotnet-tea/releases)
+Available for linux-x64, linux-arm64, osx-x64, osx-arm64, win-x64, win-arm64
+
 ```bash
-# Install as a .NET global tool
-dotnet tool install --global CoderPatros.Tea.Cli
-
-# Or download a standalone binary from GitHub releases
-# https://github.com/coderpatros/dotnet-tea/releases
-# Available for linux-x64, linux-arm64, osx-x64, osx-arm64, win-x64, win-arm64
-
-# Or run from source
+# Run from source
 dotnet run --project src/CoderPatros.Tea.Cli -- --help
 ```
 
