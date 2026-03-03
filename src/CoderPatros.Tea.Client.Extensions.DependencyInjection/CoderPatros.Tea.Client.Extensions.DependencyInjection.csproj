@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>CoderPatros.Tea.Client.Extensions.DependencyInjection</PackageId>
+    <Description>Dependency injection extensions for CoderPatros.Tea.Client</Description>
+    <Authors>TEA Contributors</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/CycloneDX/transparency-exchange-api</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/CycloneDX/transparency-exchange-api</RepositoryUrl>
+    <PackageTags>tea;transparency;sbom;vex;supply-chain;cyclonedx;dependency-injection</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CoderPatros.Tea.Client\CoderPatros.Tea.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-# Tea.Client
+# CoderPatros.Tea.Client
 
 A C# .NET client library for the [Transparency Exchange API (TEA)](https://github.com/CycloneDX/transparency-exchange-api) — the OWASP/ECMA TC54 standard for automating the exchange of software supply chain transparency artifacts (SBOMs, VEX, attestations, and more).
 
@@ -8,8 +8,8 @@ Targets the TEA specification **v0.3.0-beta.2**.
 
 | Package | Description |
 | --- | --- |
-| `Tea.Client` | Core client library |
-| `Tea.Client.Extensions.DependencyInjection` | DI integration with `IHttpClientFactory` |
+| `CoderPatros.Tea.Client` | Core client library |
+| `CoderPatros.Tea.Client.Extensions.DependencyInjection` | DI integration with `IHttpClientFactory` |
 
 ## Requirements
 
@@ -20,7 +20,7 @@ Targets the TEA specification **v0.3.0-beta.2**.
 ### Direct usage
 
 ```csharp
-using Tea.Client;
+using CoderPatros.Tea.Client;
 
 var httpClient = new HttpClient
 {
@@ -42,7 +42,7 @@ var results = await client.QueryProductsAsync(
 ### With dependency injection
 
 ```csharp
-using Tea.Client.Extensions.DependencyInjection;
+using CoderPatros.Tea.Client.Extensions.DependencyInjection;
 
 services.AddTeaClient(options =>
 {
@@ -130,7 +130,7 @@ await client.DiscoverByTeiAsync("urn:tei:uuid:products.example.com:d4d9f54a-abcf
 Parse Transparency Exchange Identifiers (TEIs) directly:
 
 ```csharp
-using Tea.Client.Discovery;
+using CoderPatros.Tea.Client.Discovery;
 
 var tei = Tei.Parse("urn:tei:purl:cyclonedx.org:pkg:pypi/cyclonedx-python-lib@8.4.0");
 // tei.Type     == TeiType.Purl
@@ -151,7 +151,7 @@ Supported TEI types: `uuid`, `purl`, `hash`, `swid`, `eanupc`, `gtin`, `asin`, `
 The `TeiResolver` implements the full discovery flow: parse TEI, fetch `.well-known/tea`, select the best endpoint by version compatibility and priority, then call `/discovery`:
 
 ```csharp
-using Tea.Client.Discovery;
+using CoderPatros.Tea.Client.Discovery;
 
 var resolver = new TeiResolver(httpClient);
 var results = await resolver.ResolveAsync("urn:tei:uuid:products.example.com:some-uuid");

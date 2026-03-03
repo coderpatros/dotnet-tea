@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>CoderPatros.Tea.Client</PackageId>
+    <Description>C# .NET client library for the Transparency Exchange API (TEA)</Description>
+    <Authors>TEA Contributors</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/CycloneDX/transparency-exchange-api</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/CycloneDX/transparency-exchange-api</RepositoryUrl>
+    <PackageTags>tea;transparency;sbom;vex;supply-chain;cyclonedx</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="9.0.3" />
+  </ItemGroup>
+
+</Project>
