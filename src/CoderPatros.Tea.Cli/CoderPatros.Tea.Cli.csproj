@@ -10,6 +10,7 @@
     <RepositoryUrl>https://github.com/CycloneDX/transparency-exchange-api</RepositoryUrl>
     <PackageTags>tea;transparency;sbom;vex;supply-chain;cyclonedx;cli</PackageTags>
     <PackAsTool>true</PackAsTool>
+    <AssemblyName>tea</AssemblyName>
     <ToolCommandName>tea</ToolCommandName>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
