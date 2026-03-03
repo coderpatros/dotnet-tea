@@ -1,4 +1,18 @@
-# CoderPatros.Tea.Client
+# dotnet-tea
+
+A .NET toolkit for the [Transparency Exchange API (TEA)](https://github.com/CycloneDX/transparency-exchange-api) — the OWASP/ECMA TC54 standard for automating the exchange of software supply chain transparency artifacts (SBOMs, VEX, attestations, and more). Targets the TEA specification **v0.3.0-beta.2**.
+
+This project provides:
+
+- **C# Client Libraries** — NuGet packages for integrating TEA into .NET applications, with full API coverage, dependency injection support, TEI parsing, and TEI resolution.
+- **CLI Tool** — A command-line interface (`tea`) for querying TEA servers, discovering endpoints, inspecting artifacts, and downloading SBOMs.
+- **TEA Explorer Web App** — A browser-based interface for browsing and exploring TEA servers, built with ASP.NET Core Razor Pages.
+
+## Acknowledgments
+
+Special thanks to [Viktor Petersson](https://github.com/vpetersson) and [sbomify](https://sbomify.com) for providing a public TEA server and client implementation. This project was developed and tested against their implementation and wouldn't exist without it.
+
+## CoderPatros.Tea.Client
 
 A C# .NET client library for the [Transparency Exchange API (TEA)](https://github.com/CycloneDX/transparency-exchange-api) — the OWASP/ECMA TC54 standard for automating the exchange of software supply chain transparency artifacts (SBOMs, VEX, attestations, and more).
 
