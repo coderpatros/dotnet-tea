@@ -102,12 +102,25 @@ internal static class InspectCommand
 
                 try
                 {
-                    var componentRelease = await client.GetComponentReleaseAsync(componentRef.Uuid, ct);
-                    formatter.WriteComponentReleaseWithCollection(componentRelease);
+                    if (componentRef.Release is not null)
+                    {
+                        // Pinned to a specific component release
+                        var componentRelease = await client.GetComponentReleaseAsync(componentRef.Release, ct);
+                        formatter.WriteComponentReleaseWithCollection(componentRelease);
+                    }
+                    else
+                    {
+                        // No pinned release — fetch the component and its releases
+                        var component = await client.GetComponentAsync(componentRef.Uuid, ct);
+                        formatter.WriteComponent(component);
+
+                        var releases = await client.GetComponentReleasesAsync(componentRef.Uuid, ct);
+                        formatter.WriteComponentReleases(releases);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Failed to get component release {componentRef.Uuid}: {ex.Message}");
+                    Console.Error.WriteLine($"Failed to get component {componentRef.Uuid}: {ex.Message}");
                 }
             }
 
