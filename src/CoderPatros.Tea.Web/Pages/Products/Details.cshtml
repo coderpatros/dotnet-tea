@@ -1,0 +1,56 @@
+@page "{uuid}"
+@model CoderPatros.Tea.Web.Pages.Products.DetailsModel
+@{
+    ViewData["Title"] = $"Product: {Model.Product?.Name ?? Model.Uuid}";
+}
+
+<h2>Product Details</h2>
+
+<partial name="_ErrorPartial" model="Model.ErrorMessage" />
+
+@if (Model.Product is not null)
+{
+    <dl class="row">
+        <dt class="col-sm-3">UUID</dt>
+        <dd class="col-sm-9 tea-uuid">@Model.Product.Uuid</dd>
+
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Product.Name</dd>
+
+        <dt class="col-sm-3">Identifiers</dt>
+        <dd class="col-sm-9"><partial name="_IdentifiersPartial" model="Model.Product.Identifiers" /></dd>
+
+        <dt class="col-sm-3">CLE</dt>
+        <dd class="col-sm-9"><a asp-page="/Cle/Details" asp-route-uuid="@Model.Product.Uuid" asp-route-entity="product">View Compliance Lifecycle Events</a></dd>
+    </dl>
+
+    @if (Model.Releases is not null && Model.Releases.Results.Count > 0)
+    {
+        <h4>Releases</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>UUID</th>
+                    <th>Version</th>
+                    <th>Created</th>
+                    <th>Release Date</th>
+                    <th>Components</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var release in Model.Releases.Results)
+                {
+                    <tr>
+                        <td class="tea-uuid"><a asp-page="/Releases/ProductRelease" asp-route-uuid="@release.Uuid">@release.Uuid</a></td>
+                        <td>@release.Version</td>
+                        <td>@release.CreatedDate.ToString("yyyy-MM-dd")</td>
+                        <td>@release.ReleaseDate?.ToString("yyyy-MM-dd")</td>
+                        <td>@release.Components.Count</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <partial name="_PaginationPartial" model="@((Model.Releases.PageStartIndex, Model.Releases.PageSize, Model.Releases.TotalResults, $"/Products/Details/{Model.Uuid}?dummy=1"))" />
+    }
+}

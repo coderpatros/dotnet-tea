@@ -1,0 +1,22 @@
+@page "{uuid}"
+@model CoderPatros.Tea.Web.Pages.Releases.CollectionsModel
+@{
+    ViewData["Title"] = $"Collections for {Model.Uuid}";
+}
+
+<h2>Collections for @(Model.Component ? "Component" : "Product") Release</h2>
+<p class="tea-uuid">Release UUID: @Model.Uuid</p>
+
+<partial name="_ErrorPartial" model="Model.ErrorMessage" />
+
+@if (Model.CollectionsList is { Count: > 0 })
+{
+    @foreach (var collection in Model.CollectionsList)
+    {
+        <partial name="_CollectionPartial" model="collection" />
+    }
+}
+else if (Model.ErrorMessage is null)
+{
+    <p class="text-muted">No collections found.</p>
+}

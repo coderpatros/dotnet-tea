@@ -1,0 +1,42 @@
+@page
+@model CoderPatros.Tea.Web.Pages.Products.SearchModel
+@{
+    ViewData["Title"] = "Search Products";
+}
+
+<h2>Search Products</h2>
+
+<partial name="_ErrorPartial" model="Model.ErrorMessage" />
+
+@if (Model.Results is not null)
+{
+    <partial name="_PaginationPartial" model="@((Model.Results.PageStartIndex, Model.Results.PageSize, Model.Results.TotalResults, $"/Products/Search?idType={Model.IdType}&idValue={Uri.EscapeDataString(Model.IdValue ?? "")}"))" />
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>UUID</th>
+                <th>Name</th>
+                <th>Identifiers</th>
+                <th>CLE</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Results.Results)
+            {
+                <tr>
+                    <td class="tea-uuid"><a asp-page="Details" asp-route-uuid="@product.Uuid">@product.Uuid</a></td>
+                    <td>@product.Name</td>
+                    <td><partial name="_IdentifiersPartial" model="product.Identifiers" /></td>
+                    <td><a asp-page="/Cle/Details" asp-route-uuid="@product.Uuid" asp-route-entity="product">View CLE</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <partial name="_PaginationPartial" model="@((Model.Results.PageStartIndex, Model.Results.PageSize, Model.Results.TotalResults, $"/Products/Search?idType={Model.IdType}&idValue={Uri.EscapeDataString(Model.IdValue ?? "")}"))" />
+}
+else if (Model.ErrorMessage is null && Model.IdValue is not null)
+{
+    <p class="text-muted">No results found.</p>
+}

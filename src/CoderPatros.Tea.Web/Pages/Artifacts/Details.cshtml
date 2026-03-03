@@ -1,0 +1,91 @@
+@page "{uuid}"
+@model CoderPatros.Tea.Web.Pages.Artifacts.DetailsModel
+@{
+    ViewData["Title"] = $"Artifact: {Model.Artifact?.Name ?? Model.Uuid}";
+}
+
+<h2>Artifact Details</h2>
+
+<partial name="_ErrorPartial" model="Model.ErrorMessage" />
+
+@if (Model.Artifact is not null)
+{
+    <dl class="row">
+        @if (Model.Artifact.Uuid is not null)
+        {
+            <dt class="col-sm-3">UUID</dt>
+            <dd class="col-sm-9 tea-uuid">@Model.Artifact.Uuid</dd>
+        }
+
+        @if (Model.Artifact.Name is not null)
+        {
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.Artifact.Name</dd>
+        }
+
+        @if (Model.Artifact.Type is not null)
+        {
+            <dt class="col-sm-3">Type</dt>
+            <dd class="col-sm-9">@Model.Artifact.Type</dd>
+        }
+
+        @if (Model.Artifact.DistributionTypes is { Count: > 0 })
+        {
+            <dt class="col-sm-3">Distribution Types</dt>
+            <dd class="col-sm-9">
+                @foreach (var dt in Model.Artifact.DistributionTypes)
+                {
+                    <span class="badge bg-secondary me-1">@dt</span>
+                }
+            </dd>
+        }
+    </dl>
+
+    @if (Model.Artifact.Formats is { Count: > 0 })
+    {
+        <h4>Formats</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Media Type</th>
+                    <th>Description</th>
+                    <th>Download URL</th>
+                    <th>Signature URL</th>
+                    <th>Checksums</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var format in Model.Artifact.Formats)
+                {
+                    <tr>
+                        <td>@format.MediaType</td>
+                        <td>@format.Description</td>
+                        <td>
+                            @if (format.Url is not null)
+                            {
+                                <a href="@format.Url" target="_blank" rel="noopener">Download</a>
+                            }
+                        </td>
+                        <td>
+                            @if (format.SignatureUrl is not null)
+                            {
+                                <a href="@format.SignatureUrl" target="_blank" rel="noopener">Signature</a>
+                            }
+                        </td>
+                        <td>
+                            @if (format.Checksums is { Count: > 0 })
+                            {
+                                <ul class="list-unstyled mb-0">
+                                    @foreach (var checksum in format.Checksums)
+                                    {
+                                        <li><strong>@checksum.AlgType:</strong> <code class="small">@checksum.AlgValue</code></li>
+                                    }
+                                </ul>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}

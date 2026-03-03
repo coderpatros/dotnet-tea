@@ -1,0 +1,128 @@
+@page
+@model CoderPatros.Tea.Web.Pages.InspectModel
+@{
+    ViewData["Title"] = "Inspect TEI";
+}
+
+<h2>Inspect TEI</h2>
+@if (Model.Tei is not null)
+{
+    <p>TEI: <code>@Model.Tei</code></p>
+}
+
+<partial name="_ErrorPartial" model="Model.ErrorMessage" />
+
+@if (Model.DiscoveryResults is { Count: > 0 })
+{
+    <div class="card mb-3">
+        <div class="card-header">Discovery Results</div>
+        <div class="card-body">
+            @foreach (var result in Model.DiscoveryResults)
+            {
+                <p>Product Release: <a asp-page="/Releases/ProductRelease" asp-route-uuid="@result.ProductReleaseUuid" class="tea-uuid">@result.ProductReleaseUuid</a></p>
+                @foreach (var server in result.Servers)
+                {
+                    <p class="small text-muted mb-0">Server: @server.RootUrl (versions: @string.Join(", ", server.Versions), priority: @server.Priority)</p>
+                }
+            }
+            @if (Model.ServerUrl is not null)
+            {
+                <p class="mt-2"><strong>Using server:</strong> <code>@Model.ServerUrl</code></p>
+            }
+        </div>
+    </div>
+}
+
+<partial name="_ErrorPartial" model="Model.ReleaseError" />
+
+@if (Model.Release is not null)
+{
+    <div class="card mb-3">
+        <div class="card-header">Product Release</div>
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-3">UUID</dt>
+                <dd class="col-sm-9 tea-uuid"><a asp-page="/Releases/ProductRelease" asp-route-uuid="@Model.Release.Uuid">@Model.Release.Uuid</a></dd>
+
+                <dt class="col-sm-3">Version</dt>
+                <dd class="col-sm-9">@Model.Release.Version</dd>
+
+                @if (Model.Release.Product is not null)
+                {
+                    <dt class="col-sm-3">Product</dt>
+                    <dd class="col-sm-9 tea-uuid"><a asp-page="/Products/Details" asp-route-uuid="@Model.Release.Product">@(Model.Release.ProductName ?? Model.Release.Product)</a></dd>
+                }
+
+                <dt class="col-sm-3">Created</dt>
+                <dd class="col-sm-9">@Model.Release.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss zzz")</dd>
+
+                <dt class="col-sm-3">Components</dt>
+                <dd class="col-sm-9">@Model.Release.Components.Count</dd>
+
+                <dt class="col-sm-3">Identifiers</dt>
+                <dd class="col-sm-9"><partial name="_IdentifiersPartial" model="Model.Release.Identifiers" /></dd>
+            </dl>
+        </div>
+    </div>
+
+    <partial name="_ErrorPartial" model="Model.CollectionError" />
+
+    @if (Model.LatestCollection is not null)
+    {
+        <div class="card mb-3">
+            <div class="card-header">Latest Collection</div>
+            <div class="card-body">
+                <partial name="_CollectionPartial" model="Model.LatestCollection" />
+            </div>
+        </div>
+    }
+
+    @if (Model.Components.Count > 0)
+    {
+        <h4>Components (@Model.Components.Count of @Model.Release.Components.Count)</h4>
+
+        @foreach (var comp in Model.Components)
+        {
+            <div class="card mb-2">
+                <div class="card-body">
+                    @if (comp.Error is not null)
+                    {
+                        <partial name="_ErrorPartial" model="comp.Error" />
+                    }
+                    else if (comp.ReleaseWithCollection is not null)
+                    {
+                        var rel = comp.ReleaseWithCollection.Release;
+                        <h6>
+                            <a asp-page="/Releases/ComponentRelease" asp-route-uuid="@rel.Uuid">@(rel.ComponentName ?? rel.Uuid)</a>
+                            <span class="text-muted">@rel.Version</span>
+                        </h6>
+                        <p class="tea-uuid small mb-1">
+                            Component Release: <a asp-page="/Releases/ComponentRelease" asp-route-uuid="@rel.Uuid">@rel.Uuid</a>
+                            @if (rel.Component is not null)
+                            {
+                                <span class="ms-2">Component: <a asp-page="/Components/Details" asp-route-uuid="@rel.Component">@rel.Component</a></span>
+                            }
+                        </p>
+                        <partial name="_IdentifiersPartial" model="rel.Identifiers" />
+                    }
+                    else if (comp.Component is not null)
+                    {
+                        <h6><a asp-page="/Components/Details" asp-route-uuid="@comp.Component.Uuid">@comp.Component.Name</a></h6>
+                        <p class="tea-uuid small mb-1">Component: <a asp-page="/Components/Details" asp-route-uuid="@comp.Component.Uuid">@comp.Component.Uuid</a></p>
+                        <partial name="_IdentifiersPartial" model="comp.Component.Identifiers" />
+
+                        @if (comp.Releases is { Count: > 0 })
+                        {
+                            <p class="mt-1 mb-0 small text-muted">@comp.Releases.Count release(s) available</p>
+                        }
+                    }
+                </div>
+            </div>
+        }
+
+        @if (Model.Release.Components.Count > 10)
+        {
+            <p class="text-muted">...and @(Model.Release.Components.Count - 10) more components</p>
+        }
+    }
+}

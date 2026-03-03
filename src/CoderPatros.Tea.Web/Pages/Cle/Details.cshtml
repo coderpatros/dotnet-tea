@@ -1,0 +1,93 @@
+@page
+@model CoderPatros.Tea.Web.Pages.Cle.DetailsModel
+@{
+    ViewData["Title"] = $"CLE: {Model.Entity} {Model.Uuid}";
+}
+
+<h2>Compliance Lifecycle Events</h2>
+<p>
+    <strong>Entity:</strong> @Model.Entity
+    <span class="tea-uuid ms-2">@Model.Uuid</span>
+    @{
+        var backPage = Model.Entity switch
+        {
+            "product" => "/Products/Details",
+            "productRelease" => "/Releases/ProductRelease",
+            "component" => "/Components/Details",
+            "componentRelease" => "/Releases/ComponentRelease",
+            _ => (string?)null
+        };
+    }
+    @if (backPage is not null)
+    {
+        <a href="@backPage/@Model.Uuid" class="btn btn-sm btn-outline-secondary ms-2">Back to Entity</a>
+    }
+</p>
+
+<partial name="_ErrorPartial" model="Model.ErrorMessage" />
+
+@if (Model.CleData is not null)
+{
+    @if (Model.CleData.Definitions?.Support is { Count: > 0 })
+    {
+        <h4>Support Definitions</h4>
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Description</th>
+                    <th>URL</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var def in Model.CleData.Definitions.Support)
+                {
+                    <tr>
+                        <td>@def.Id</td>
+                        <td>@def.Description</td>
+                        <td>
+                            @if (def.Url is not null)
+                            {
+                                <a href="@def.Url" target="_blank" rel="noopener">@def.Url</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <h4>Events (@Model.CleData.Events.Count)</h4>
+    @if (Model.CleData.Events.Count > 0)
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Effective</th>
+                    <th>Published</th>
+                    <th>Version</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var evt in Model.CleData.Events)
+                {
+                    <tr>
+                        <td>@evt.Id</td>
+                        <td><span class="badge bg-primary">@evt.Type</span></td>
+                        <td>@evt.Effective.ToString("yyyy-MM-dd")</td>
+                        <td>@evt.Published.ToString("yyyy-MM-dd")</td>
+                        <td>@evt.Version</td>
+                        <td>@evt.Description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted">No CLE events.</p>
+    }
+}

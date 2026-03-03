@@ -1,0 +1,86 @@
+@page "{uuid}"
+@model CoderPatros.Tea.Web.Pages.Releases.ComponentReleaseModel
+@{
+    var release = Model.ReleaseWithCollection?.Release;
+    ViewData["Title"] = $"Component Release: {release?.Version ?? Model.Uuid}";
+}
+
+<h2>Component Release Details</h2>
+
+<partial name="_ErrorPartial" model="Model.ErrorMessage" />
+
+@if (Model.ReleaseWithCollection is not null)
+{
+    var rel = Model.ReleaseWithCollection.Release;
+    <dl class="row">
+        <dt class="col-sm-3">UUID</dt>
+        <dd class="col-sm-9 tea-uuid">@rel.Uuid</dd>
+
+        <dt class="col-sm-3">Version</dt>
+        <dd class="col-sm-9">@rel.Version</dd>
+
+        @if (rel.Component is not null)
+        {
+            <dt class="col-sm-3">Component</dt>
+            <dd class="col-sm-9 tea-uuid"><a asp-page="/Components/Details" asp-route-uuid="@rel.Component">@(rel.ComponentName ?? rel.Component)</a></dd>
+        }
+
+        <dt class="col-sm-3">Created</dt>
+        <dd class="col-sm-9">@rel.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss zzz")</dd>
+
+        @if (rel.ReleaseDate is not null)
+        {
+            <dt class="col-sm-3">Release Date</dt>
+            <dd class="col-sm-9">@rel.ReleaseDate.Value.ToString("yyyy-MM-dd")</dd>
+        }
+
+        @if (rel.PreRelease is true)
+        {
+            <dt class="col-sm-3">Pre-release</dt>
+            <dd class="col-sm-9"><span class="badge bg-warning">Yes</span></dd>
+        }
+
+        <dt class="col-sm-3">Identifiers</dt>
+        <dd class="col-sm-9"><partial name="_IdentifiersPartial" model="rel.Identifiers" /></dd>
+
+        <dt class="col-sm-3">CLE</dt>
+        <dd class="col-sm-9"><a asp-page="/Cle/Details" asp-route-uuid="@rel.Uuid" asp-route-entity="componentRelease">View CLE</a></dd>
+
+        <dt class="col-sm-3">Collections</dt>
+        <dd class="col-sm-9"><a asp-page="/Releases/Collections" asp-route-uuid="@rel.Uuid" asp-route-component="true">View All Collections</a></dd>
+    </dl>
+
+    @if (rel.Distributions is { Count: > 0 })
+    {
+        <h4>Distributions</h4>
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>URL</th>
+                    <th>Identifiers</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dist in rel.Distributions)
+                {
+                    <tr>
+                        <td>@dist.DistributionType</td>
+                        <td>@dist.Description</td>
+                        <td>
+                            @if (dist.Url is not null)
+                            {
+                                <a href="@dist.Url" target="_blank" rel="noopener">@dist.Url</a>
+                            }
+                        </td>
+                        <td><partial name="_IdentifiersPartial" model="dist.Identifiers" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <h4>Latest Collection</h4>
+    <partial name="_CollectionPartial" model="Model.ReleaseWithCollection.LatestCollection" />
+}

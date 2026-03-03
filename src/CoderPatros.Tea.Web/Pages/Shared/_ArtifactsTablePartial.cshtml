@@ -1,0 +1,50 @@
+@model IReadOnlyList<TeaArtifact>?
+
+@if (Model is { Count: > 0 })
+{
+    <table class="table table-sm table-striped">
+        <thead>
+            <tr>
+                <th>UUID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Formats</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var artifact in Model)
+            {
+                <tr>
+                    <td class="tea-uuid">
+                        @if (artifact.Uuid is not null)
+                        {
+                            <a asp-page="/Artifacts/Details" asp-route-uuid="@artifact.Uuid">@artifact.Uuid</a>
+                        }
+                    </td>
+                    <td>@artifact.Name</td>
+                    <td>@artifact.Type</td>
+                    <td>
+                        @if (artifact.Formats is { Count: > 0 })
+                        {
+                            @foreach (var format in artifact.Formats)
+                            {
+                                if (format.Url is not null)
+                                {
+                                    <a href="@format.Url" target="_blank" rel="noopener" class="badge bg-info text-decoration-none me-1">@(format.MediaType ?? "download")</a>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary me-1">@format.MediaType</span>
+                                }
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted">No artifacts.</p>
+}

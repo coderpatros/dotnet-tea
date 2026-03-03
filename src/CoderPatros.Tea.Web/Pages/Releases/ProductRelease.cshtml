@@ -1,0 +1,88 @@
+@page "{uuid}"
+@model CoderPatros.Tea.Web.Pages.Releases.ProductReleaseModel
+@{
+    ViewData["Title"] = $"Product Release: {Model.Release?.Version ?? Model.Uuid}";
+}
+
+<h2>Product Release Details</h2>
+
+<partial name="_ErrorPartial" model="Model.ErrorMessage" />
+
+@if (Model.Release is not null)
+{
+    <dl class="row">
+        <dt class="col-sm-3">UUID</dt>
+        <dd class="col-sm-9 tea-uuid">@Model.Release.Uuid</dd>
+
+        <dt class="col-sm-3">Version</dt>
+        <dd class="col-sm-9">@Model.Release.Version</dd>
+
+        @if (Model.Release.Product is not null)
+        {
+            <dt class="col-sm-3">Product</dt>
+            <dd class="col-sm-9 tea-uuid"><a asp-page="/Products/Details" asp-route-uuid="@Model.Release.Product">@(Model.Release.ProductName ?? Model.Release.Product)</a></dd>
+        }
+
+        <dt class="col-sm-3">Created</dt>
+        <dd class="col-sm-9">@Model.Release.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss zzz")</dd>
+
+        @if (Model.Release.ReleaseDate is not null)
+        {
+            <dt class="col-sm-3">Release Date</dt>
+            <dd class="col-sm-9">@Model.Release.ReleaseDate.Value.ToString("yyyy-MM-dd")</dd>
+        }
+
+        @if (Model.Release.PreRelease is true)
+        {
+            <dt class="col-sm-3">Pre-release</dt>
+            <dd class="col-sm-9"><span class="badge bg-warning">Yes</span></dd>
+        }
+
+        <dt class="col-sm-3">Identifiers</dt>
+        <dd class="col-sm-9"><partial name="_IdentifiersPartial" model="Model.Release.Identifiers" /></dd>
+
+        <dt class="col-sm-3">CLE</dt>
+        <dd class="col-sm-9"><a asp-page="/Cle/Details" asp-route-uuid="@Model.Release.Uuid" asp-route-entity="productRelease">View CLE</a></dd>
+
+        <dt class="col-sm-3">Collections</dt>
+        <dd class="col-sm-9"><a asp-page="/Releases/Collections" asp-route-uuid="@Model.Release.Uuid">View All Collections</a></dd>
+    </dl>
+
+    <h4>Components (@Model.Release.Components.Count)</h4>
+    @if (Model.Release.Components.Count > 0)
+    {
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>Component UUID</th>
+                    <th>Release UUID</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var comp in Model.Release.Components)
+                {
+                    <tr>
+                        <td class="tea-uuid"><a asp-page="/Components/Details" asp-route-uuid="@comp.Uuid">@comp.Uuid</a></td>
+                        <td class="tea-uuid">
+                            @if (comp.Release is not null)
+                            {
+                                <a asp-page="/Releases/ComponentRelease" asp-route-uuid="@comp.Release">@comp.Release</a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Not pinned</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <h4>Latest Collection</h4>
+    <partial name="_ErrorPartial" model="Model.CollectionError" />
+    @if (Model.LatestCollection is not null)
+    {
+        <partial name="_CollectionPartial" model="Model.LatestCollection" />
+    }
+}

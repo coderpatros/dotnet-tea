@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - TEA Explorer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous" />
+    <style>
+        .tea-uuid { font-family: monospace; font-size: 0.9em; }
+        .tea-breadcrumb { margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-page="/Index">TEA Explorer</a>
+            <div class="navbar-nav">
+                <a class="nav-link" asp-page="/Index">Home</a>
+            </div>
+            @{
+                var serverUrl = Context.Session.GetString("Tea:BaseUrl");
+            }
+            @if (!string.IsNullOrWhiteSpace(serverUrl))
+            {
+                <span class="navbar-text ms-auto">
+                    <span class="badge bg-success">Connected</span>
+                    <span class="text-light ms-1 small">@serverUrl</span>
+                </span>
+            }
+            else
+            {
+                <span class="navbar-text ms-auto">
+                    <span class="badge bg-secondary">No server configured</span>
+                </span>
+            }
+        </div>
+    </nav>
+
+    <div class="container">
+        @if (ViewData["Breadcrumbs"] is List<(string Label, string? Url)> breadcrumbs)
+        {
+            <nav aria-label="breadcrumb" class="tea-breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
+                    @for (var i = 0; i < breadcrumbs.Count; i++)
+                    {
+                        var crumb = breadcrumbs[i];
+                        if (i == breadcrumbs.Count - 1)
+                        {
+                            <li class="breadcrumb-item active" aria-current="page">@crumb.Label</li>
+                        }
+                        else
+                        {
+                            <li class="breadcrumb-item"><a href="@crumb.Url">@crumb.Label</a></li>
+                        }
+                    }
+                </ol>
+            </nav>
+        }
+
+        @RenderBody()
+    </div>
+
+    <footer class="container mt-4 mb-3">
+        <hr />
+        <p class="text-muted small">TEA Explorer &mdash; Transparency Exchange API browser</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+            crossorigin="anonymous"></script>
+</body>
+</html>

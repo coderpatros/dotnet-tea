@@ -1,0 +1,25 @@
+@model (long PageStartIndex, long PageSize, long TotalResults, string BaseUrl)
+
+@{
+    var start = Model.PageStartIndex + 1;
+    var end = Math.Min(Model.PageStartIndex + Model.PageSize, Model.TotalResults);
+    var hasPrev = Model.PageStartIndex > 0;
+    var hasNext = Model.PageStartIndex + Model.PageSize < Model.TotalResults;
+    var prevOffset = Math.Max(0, Model.PageStartIndex - Model.PageSize);
+    var nextOffset = Model.PageStartIndex + Model.PageSize;
+    var separator = Model.BaseUrl.Contains('?') ? "&" : "?";
+}
+
+<div class="d-flex justify-content-between align-items-center my-3">
+    <span class="text-muted">Showing @start&ndash;@end of @Model.TotalResults</span>
+    <nav>
+        <ul class="pagination pagination-sm mb-0">
+            <li class="page-item @(hasPrev ? "" : "disabled")">
+                <a class="page-link" href="@(Model.BaseUrl)@(separator)pageOffset=@prevOffset&pageSize=@Model.PageSize">Previous</a>
+            </li>
+            <li class="page-item @(hasNext ? "" : "disabled")">
+                <a class="page-link" href="@(Model.BaseUrl)@(separator)pageOffset=@nextOffset&pageSize=@Model.PageSize">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>

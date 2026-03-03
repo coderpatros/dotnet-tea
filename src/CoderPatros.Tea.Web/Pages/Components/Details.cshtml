@@ -1,0 +1,52 @@
+@page "{uuid}"
+@model CoderPatros.Tea.Web.Pages.Components.DetailsModel
+@{
+    ViewData["Title"] = $"Component: {Model.Component?.Name ?? Model.Uuid}";
+}
+
+<h2>Component Details</h2>
+
+<partial name="_ErrorPartial" model="Model.ErrorMessage" />
+
+@if (Model.Component is not null)
+{
+    <dl class="row">
+        <dt class="col-sm-3">UUID</dt>
+        <dd class="col-sm-9 tea-uuid">@Model.Component.Uuid</dd>
+
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Component.Name</dd>
+
+        <dt class="col-sm-3">Identifiers</dt>
+        <dd class="col-sm-9"><partial name="_IdentifiersPartial" model="Model.Component.Identifiers" /></dd>
+
+        <dt class="col-sm-3">CLE</dt>
+        <dd class="col-sm-9"><a asp-page="/Cle/Details" asp-route-uuid="@Model.Component.Uuid" asp-route-entity="component">View CLE</a></dd>
+    </dl>
+
+    @if (Model.Releases is { Count: > 0 })
+    {
+        <h4>Releases</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>UUID</th>
+                    <th>Version</th>
+                    <th>Created</th>
+                    <th>Release Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var release in Model.Releases)
+                {
+                    <tr>
+                        <td class="tea-uuid"><a asp-page="/Releases/ComponentRelease" asp-route-uuid="@release.Uuid">@release.Uuid</a></td>
+                        <td>@release.Version</td>
+                        <td>@release.CreatedDate.ToString("yyyy-MM-dd")</td>
+                        <td>@release.ReleaseDate?.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}

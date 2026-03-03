@@ -11,6 +11,21 @@ Targets the TEA specification **v0.3.0-beta.2**.
 | `CoderPatros.Tea.Client` | Core client library |
 | `CoderPatros.Tea.Client.Extensions.DependencyInjection` | DI integration with `IHttpClientFactory` |
 
+## TEA Explorer Web App
+
+TEA Explorer is a web-based interface for browsing and exploring TEA servers. Built with ASP.NET Core Razor Pages, it provides a user-friendly way to search products and releases, discover TEI endpoints, inspect transparency artifacts, and look up entities by UUID.
+
+![TEA Explorer screenshot](tea-explorer.png)
+
+### Running
+
+```bash
+# Run from source
+dotnet run --project src/CoderPatros.Tea.Web
+```
+
+Configure a TEA server base URL and optional bearer token from the home page. Settings are stored in your browser session.
+
 ## CLI Tool
 
 The `tea` CLI is a command-line interface for interacting with TEA servers. It is available as a .NET global tool or can be run directly from source.

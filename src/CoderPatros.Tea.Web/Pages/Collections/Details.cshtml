@@ -1,0 +1,15 @@
+@page "{uuid}"
+@model CoderPatros.Tea.Web.Pages.Collections.DetailsModel
+@{
+    ViewData["Title"] = $"Collection: {Model.Uuid}";
+}
+
+<h2>Collection Details</h2>
+<p class="tea-uuid">Release UUID: @Model.Uuid</p>
+
+<partial name="_ErrorPartial" model="Model.ErrorMessage" />
+
+@if (Model.Collection is not null)
+{
+    <partial name="_CollectionPartial" model="Model.Collection" />
+}

@@ -1,0 +1,15 @@
+@model IReadOnlyList<Identifier>?
+
+@if (Model is { Count: > 0 })
+{
+    <ul class="list-unstyled mb-0">
+        @foreach (var id in Model)
+        {
+            <li><span class="badge bg-secondary">@id.IdType</span> <code>@id.IdValue</code></li>
+        }
+    </ul>
+}
+else
+{
+    <span class="text-muted">None</span>
+}

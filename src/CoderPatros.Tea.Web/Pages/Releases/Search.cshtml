@@ -1,0 +1,49 @@
+@page
+@model CoderPatros.Tea.Web.Pages.Releases.SearchModel
+@{
+    ViewData["Title"] = "Search Releases";
+}
+
+<h2>Search Product Releases</h2>
+
+<partial name="_ErrorPartial" model="Model.ErrorMessage" />
+
+@if (Model.Results is not null)
+{
+    <partial name="_PaginationPartial" model="@((Model.Results.PageStartIndex, Model.Results.PageSize, Model.Results.TotalResults, $"/Releases/Search?idType={Model.IdType}&idValue={Uri.EscapeDataString(Model.IdValue ?? "")}"))" />
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>UUID</th>
+                <th>Version</th>
+                <th>Product</th>
+                <th>Created</th>
+                <th>Components</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var release in Model.Results.Results)
+            {
+                <tr>
+                    <td class="tea-uuid"><a asp-page="ProductRelease" asp-route-uuid="@release.Uuid">@release.Uuid</a></td>
+                    <td>@release.Version</td>
+                    <td>
+                        @if (release.Product is not null)
+                        {
+                            <a asp-page="/Products/Details" asp-route-uuid="@release.Product">@(release.ProductName ?? release.Product)</a>
+                        }
+                    </td>
+                    <td>@release.CreatedDate.ToString("yyyy-MM-dd")</td>
+                    <td>@release.Components.Count</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <partial name="_PaginationPartial" model="@((Model.Results.PageStartIndex, Model.Results.PageSize, Model.Results.TotalResults, $"/Releases/Search?idType={Model.IdType}&idValue={Uri.EscapeDataString(Model.IdValue ?? "")}"))" />
+}
+else if (Model.ErrorMessage is null && Model.IdValue is not null)
+{
+    <p class="text-muted">No results found.</p>
+}

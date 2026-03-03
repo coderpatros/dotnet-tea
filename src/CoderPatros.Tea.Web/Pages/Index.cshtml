@@ -1,0 +1,129 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<h1>TEA Explorer</h1>
+<p class="lead">Browse and explore Transparency Exchange API servers.</p>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">Search Products</div>
+            <div class="card-body">
+                <form method="get" asp-page="/Products/Search">
+                    <div class="mb-3">
+                        <label for="productIdType" class="form-label">Identifier Type</label>
+                        <select name="idType" id="productIdType" class="form-select">
+                            <option value="CPE">CPE</option>
+                            <option value="PURL">PURL</option>
+                            <option value="TEI">TEI</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productIdValue" class="form-label">Identifier Value</label>
+                        <input type="text" name="idValue" id="productIdValue" class="form-control" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search Products</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">Search Releases</div>
+            <div class="card-body">
+                <form method="get" asp-page="/Releases/Search">
+                    <div class="mb-3">
+                        <label for="releaseIdType" class="form-label">Identifier Type</label>
+                        <select name="idType" id="releaseIdType" class="form-select">
+                            <option value="CPE">CPE</option>
+                            <option value="PURL">PURL</option>
+                            <option value="TEI">TEI</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="releaseIdValue" class="form-label">Identifier Value</label>
+                        <input type="text" name="idValue" id="releaseIdValue" class="form-control" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search Releases</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">Discover / Inspect TEI</div>
+            <div class="card-body">
+                <form method="get" id="teiForm">
+                    <div class="mb-3">
+                        <label for="teiUrn" class="form-label">TEI URN</label>
+                        <input type="text" id="teiUrn" class="form-control" placeholder="urn:tei:uuid:example.com:..." required />
+                    </div>
+                    <div class="btn-group">
+                        <a id="discoverLink" class="btn btn-primary" asp-page="/Discover">Discover</a>
+                        <a id="inspectLink" class="btn btn-outline-primary" asp-page="/Inspect">Inspect</a>
+                    </div>
+                </form>
+                <script>
+                    document.getElementById('teiUrn').addEventListener('input', function () {
+                        var tei = encodeURIComponent(this.value);
+                        document.getElementById('discoverLink').href = '/Discover?tei=' + tei;
+                        document.getElementById('inspectLink').href = '/Inspect?tei=' + tei;
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">Direct Lookup</div>
+            <div class="card-body">
+                <form method="post" asp-page-handler="Lookup">
+                    <div class="mb-3">
+                        <label for="entityType" class="form-label">Entity Type</label>
+                        <select name="entityType" id="entityType" class="form-select">
+                            <option value="product">Product</option>
+                            <option value="productRelease">Product Release</option>
+                            <option value="component">Component</option>
+                            <option value="componentRelease">Component Release</option>
+                            <option value="artifact">Artifact</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lookupUuid" class="form-label">UUID</label>
+                        <input type="text" name="uuid" id="lookupUuid" class="form-control" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Look Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">Server Settings</div>
+            <div class="card-body">
+                <form method="post" asp-page-handler="Settings">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="baseUrl" class="form-label">TEA Server Base URL</label>
+                            <input type="url" name="BaseUrl" id="baseUrl" class="form-control" value="@Model.BaseUrl" placeholder="https://tea.example.com/v0.3.0-beta.2" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="token" class="form-label">Bearer Token (optional)</label>
+                            <input type="password" name="Token" id="token" class="form-control" value="@Model.Token" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Save Settings</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
