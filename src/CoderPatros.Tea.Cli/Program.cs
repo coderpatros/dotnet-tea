@@ -76,6 +76,8 @@ public static class Program
 
         if (effectiveBaseUrl is not null)
         {
+            if (!effectiveBaseUrl.EndsWith('/'))
+                effectiveBaseUrl += '/';
             client.BaseAddress = new Uri(effectiveBaseUrl);
         }
 

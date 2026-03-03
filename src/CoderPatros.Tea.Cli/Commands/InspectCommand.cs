@@ -43,7 +43,9 @@ internal static class InspectCommand
 
             // Use first server to create a client
             var firstResult = discoveryResults[0];
-            var serverUrl = firstResult.Servers[0].RootUrl;
+            var server = firstResult.Servers[0];
+            var version = server.Versions[0];
+            var serverUrl = $"{server.RootUrl.TrimEnd('/')}/v{version}";
             var client = Program.CreateTeaClient(serverUrl, token, timeout);
 
             // Step 2: Get product release
