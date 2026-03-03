@@ -57,9 +57,71 @@ jobs:
       - name: Test
         run: dotnet test --no-build --verbosity normal
 
+  build:
+    name: Build (${{ matrix.rid }})
+    needs: [validate, test]
+    runs-on: ${{ matrix.runner }}
+    env:
+      VERSION: ${{ needs.validate.outputs.version }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rid: linux-x64
+            runner: ubuntu-latest
+            archive: tar.gz
+          - rid: linux-arm64
+            runner: ubuntu-latest
+            archive: tar.gz
+          - rid: osx-x64
+            runner: macos-latest
+            archive: tar.gz
+          - rid: osx-arm64
+            runner: macos-latest
+            archive: tar.gz
+          - rid: win-x64
+            runner: windows-latest
+            archive: zip
+          - rid: win-arm64
+            runner: windows-latest
+            archive: zip
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish
+        run: >
+          dotnet publish src/CoderPatros.Tea.Web/CoderPatros.Tea.Web.csproj
+          -c Release
+          -r ${{ matrix.rid }}
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:DebugType=none
+          -p:Version=${{ env.VERSION }}
+          -o ./publish
+
+      - name: Archive (tar.gz)
+        if: matrix.archive == 'tar.gz'
+        run: tar -czf tea-web-v${{ env.VERSION }}-${{ matrix.rid }}.tar.gz -C ./publish .
+
+      - name: Archive (zip)
+        if: matrix.archive == 'zip'
+        shell: pwsh
+        run: Compress-Archive -Path ./publish/* -DestinationPath tea-web-v${{ env.VERSION }}-${{ matrix.rid }}.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tea-web-v${{ env.VERSION }}-${{ matrix.rid }}
+          path: tea-web-v${{ env.VERSION }}-${{ matrix.rid }}.${{ matrix.archive }}
+
   release:
     name: Release
-    needs: [validate, test]
+    needs: [validate, build]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -67,6 +129,12 @@ jobs:
       VERSION: ${{ needs.validate.outputs.version }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+          merge-multiple: true
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -99,3 +167,4 @@ jobs:
           tag_name: web/v${{ env.VERSION }}
           name: Web v${{ env.VERSION }}
           generate_release_notes: true
+          files: ./artifacts/*
